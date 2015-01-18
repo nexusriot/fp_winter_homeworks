@@ -46,7 +46,7 @@ object IntSet {
   def forall(s: Set, p: Int => Boolean, bound: Int): Boolean = ???
 
   /**
-   * Существует ли в `s` целое в отрезке [0; bound],
+   * Существует ли в `s` целое в отрезке [-bound; bound],
    * удовлетворяющее `p`.
    */
   def exists(s: Set, p: Int => Boolean, bound: Int): Boolean = ???
