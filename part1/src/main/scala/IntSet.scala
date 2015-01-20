@@ -11,34 +11,34 @@ object IntSet {
   /**
    * Проверка, входит ли элемент в множество
    */
-  def contains(s: Set, elem: Int): Boolean = ???
+  def contains(s: Set, elem: Int): Boolean = s(elem)
 
   /**
    * Функция создает множество, состоящее из одного элемента
    */
-  def singletonSet(elem: Int): Set = ???
+  def singletonSet(elem: Int): Set = {elem: Int => elem == elem}
 
   /**
    * Объединение множеств, в результирующее множество
    * входят элементы из `s` или `t`
    */
-  def union(s: Set, t: Set): Set = ???
+  def union(s: Set, t: Set): Set = {elem: Int => contains(s, elem) || contains(t, elem)}
 
   /**
    * Пересечение множеств, только общиее для `s` или `t` элементы
    */
-  def intersect(s: Set, t: Set): Set = ???
+  def intersect(s: Set, t: Set): Set = {elem: Int => contains(s, elem) && contains(t, elem)}
 
   /**
    * Вычитание, элементы из `s`, которых нет в `t`
    * the set of all elements of `s` that are not in `t`.
    */
-  def sub(s: Set, t: Set): Set = ???
+  def sub(s: Set, t: Set): Set = {elem: Int => contains(s, elem) && !contains(t, elem)}
 
   /**
    * Элементы `s`, удовлетворяющие предикату `p`.
    */
-  def filter(s: Set, p: Int => Boolean): Set = ???
+  def filter(s: Set, p: Int => Boolean): Set = {elem : Int => contains(s, elem) && contains (p, elem)} ///???????
 
   /**
    * Удовлетворяют ли все целые числа в отрезке [-bound; bound] из `s` предикату `p`.
