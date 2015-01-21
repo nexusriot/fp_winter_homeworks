@@ -16,7 +16,7 @@ object IntSet {
   /**
    * Функция создает множество, состоящее из одного элемента
    */
-  def singletonSet(elem: Int): Set = {elem: Int => elem == elem}
+  def singletonSet(elem: Int): Set = set => set == elem
 
   /**
    * Объединение множеств, в результирующее множество
