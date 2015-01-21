@@ -43,18 +43,37 @@ object IntSet {
   /**
    * Удовлетворяют ли все целые числа в отрезке [-bound; bound] из `s` предикату `p`.
    */
-  def forall(s: Set, p: Int => Boolean, bound: Int): Boolean = ???
+  def forall(s: Set, p: Int => Boolean, bound: Int): Boolean = {
+    def loop(i: Int): Boolean = {
+      if (-bound == i) true else if ((contains(s, i)) && (!contains(filter(s,p), i))) false
+      else loop(i-1)
+      }
+    loop(bound)
+  }
 
   /**
    * Существует ли в `s` целое в отрезке [-bound; bound],
    * удовлетворяющее `p`.
    */
-  def exists(s: Set, p: Int => Boolean, bound: Int): Boolean = ???
+  def exists(s: Set, p: Int => Boolean, bound: Int): Boolean = {
+    def loop(i: Int): Boolean = {
+      if (-bound == i) false else if ((contains(s, i)) && (contains(filter(s,p), i))) true
+      else loop(i-1)
+    }
+    loop(bound)
+  }
 
   /**
    * Применяет `f` к каждому элементу `s` в отрезке [-bound; bound].
    */
-  def map(s: Set, f: Int => Int, bound: Int): Set = ???
+  def map(s: Set, f: Int => Int, bound: Int): Set =  {
+    def loop(base: Set, modified: Set, f: Int => Int, elem: Int): Set = {
+      if (elem > bound) modified
+      else if (contains(base, elem)) loop(base, union(modified, singletonSet(f(elem))), f, elem + 1)
+      else loop(base, modified, f, elem + 1)
+    }
+    loop(s, (elem: Int) => false, f,-bound)
+  }
 
 
   /**
