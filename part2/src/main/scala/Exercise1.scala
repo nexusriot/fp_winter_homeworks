@@ -27,7 +27,17 @@ object Exercise1 {
    * Функция проверки балансировки скобок. Если в строке каждой открывающейся скобке соответсвует закрывающееся
    * (например (), (sdsadasd), (dsd)(sd)sdsdsd()) то результат true, иначе false (%-), )( и т.д.).
    */
-  def balance(chars: List[Char]): Boolean = ???
+  def balance(chars: List[Char]): Boolean = {
+
+    def f(chars: List[Char], open: Int): Boolean = {
+      if (chars.isEmpty) open == 0
+      else if (chars.head == '(') f(chars.tail,open + 1)
+      else if (chars.head == ')') open > 0 && f(chars.tail,open - 1)
+      else f(chars.tail, open)
+    }
+    f(chars, 0)
+  }
+
 
   /**
    * Exercise 3
