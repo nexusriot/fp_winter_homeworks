@@ -21,3 +21,7 @@ project/plugins/project/
 */build
 */.gradle
 */.idea
+*/.swp
+*/.ipr
+*/.iml
+*/.iws
