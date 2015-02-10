@@ -76,19 +76,7 @@ object Huffman {
     *       println("integer is  : "+ theInt)
     *   }
     */
-    def times(chars: List[Char]): List[(Char, Int)] = {
-      def timesPairs(chars: List[Char], acc: List[(Char, Int)]): List[(Char, Int)] = {
-        def charTimes(char: Char, chars: List[Char], acc: Int): (Char, Int) =
-          if (chars.isEmpty) (char, acc) 
-          else if (chars.head == char) charTimes(char, chars.tail, acc + 1)
-          else charTimes(char, chars.tail, acc)
-
-        if (chars.isEmpty) acc
-        else timesPairs(chars.filter((p: Char) => p != chars.head), charTimes(chars.head, chars.tail, 1) :: acc)
-      }
-
-      timesPairs(chars, List())
-    }
+    def times(chars: List[Char]): List[(Char, Int)] =  ???
 
     /**
     * Возвращает список узлов `Leaf` для заданной таблицы частот `freqs`.
@@ -96,29 +84,12 @@ object Huffman {
     * Возвращаемый список должен быть отсортирован в возрастающем порядке (в голове списка
       * должна стоять пара с минимальным весом), где вес пары - это частота вхождения символа.
     */
-    def makeOrderedLeafList(freqs: List[(Char, Int)]): List[Leaf] = {
-      def insert(elem: (Char, Int), acc: List[(Char, Int)], l: List[(Char, Int)]): List[(Char, Int)] = {
-        if (l.isEmpty) acc :+ elem
-        else if (l.head._2 > elem._2) acc ::: elem :: l
-        else insert(elem, acc :+ l.head, l.tail)
-      }
-
-      def makeOrderedList(freqs: List[(Char, Int)], acc: List[(Char, Int)]): List[(Char, Int)] = {
-        if (freqs.isEmpty) acc
-        else makeOrderedList(freqs.tail, insert(freqs.head, List(), acc))
-      }
-
-      def makeLeafList(freqs: List[(Char, Int)], acc: List[Leaf]): List[Leaf] = {
-        if (freqs.isEmpty) acc
-        else makeLeafList(freqs.tail, acc :+ Leaf(freqs.head._1, freqs.head._2))
-      }
-      makeLeafList(makeOrderedList(freqs, List()), List())
-    }
+    def makeOrderedLeafList(freqs: List[(Char, Int)]): List[Leaf] = ???
 
     /**
     * Проверяет что `trees` включает только одно дерево.
     */
-    def singleton(trees: List[CodeTree]): Boolean = trees.size == 1
+    def singleton(trees: List[CodeTree]): Boolean = ???
 
     /**
     * Параметр `trees` содержит список `CodeTree`, отсортированный в возрастающем порядке весов.
@@ -128,16 +99,7 @@ object Huffman {
     *
     * Если в `trees` меньше двух элементов, то он возвращается не измененным.
     */
-    def combine(trees: List[CodeTree]): List[CodeTree] = {
-      def insert(elem: CodeTree, acc: List[CodeTree], l: List[CodeTree]): List[CodeTree] = {
-        if (l.isEmpty) acc :+ elem
-        else if (l.head.weight > elem.weight) acc ::: elem :: l
-        else insert(elem, acc :+ l.head, l.tail)
-      }
-
-      if (trees.size <= 1) trees
-      else insert(makeCodeTree(trees.head, trees.tail.head), List(),  trees.tail.tail)  
-    }
+    def combine(trees: List[CodeTree]): List[CodeTree] = ???
     /**
     * Эта функция вызывается следующим образом:
     *
@@ -150,8 +112,7 @@ object Huffman {
     * затем должен вернуть этот список.
     */
     def until(finishCondition: List[CodeTree] => Boolean, combineFunction: List[CodeTree] => List[CodeTree] )(trees: List[CodeTree]): CodeTree = 
-      if (finishCondition(trees)) trees.head
-      else until(finishCondition, combineFunction) (combineFunction(trees))
+      ???
 
     /**
     * Эта функция создает оптимальное дерево Хафмана для списка символов `chars`.
@@ -159,7 +120,7 @@ object Huffman {
     * В аргументе `chars` простой текст. Эта функция определяет частоту символов в тексте
     * и создает дерево на основе этой информации.
     */
-    def createCodeTree(chars: List[Char]): CodeTree = until(singleton, combine) (makeOrderedLeafList(times(chars)))
+    def createCodeTree(chars: List[Char]): CodeTree = ???
 
     // Часть 3: Декодирование
 
@@ -169,14 +130,7 @@ object Huffman {
     * Эта функция декадирует послкдовательность бит `bits` используя дерево кодирования `tree` и возвращает
      * результат в виде списка символов.
     */
-    def decode(tree: CodeTree, bits: List[Bit]): List[Char] = {
-      def decodeAcc(treeP: CodeTree, bits: List[Bit], res: List[Char]): List[Char] = treeP match {
-          case Leaf(char, _) => if (bits.isEmpty) char :: res else decodeAcc(tree, bits, char :: res)
-          case Fork(left, right, _, _) => if (bits.isEmpty) List() else if (bits.head == 0) decodeAcc(left, bits.tail, res) else decodeAcc(right, bits.tail, res)
-      }
-
-      decodeAcc(tree, bits, List()).reverse
-    }
+    def decode(tree: CodeTree, bits: List[Bit]): List[Char] = ???
 
     /**
     * Дерево для французкого языка.
@@ -194,7 +148,7 @@ object Huffman {
     /**
     * Напишите функцию декадирования зашифрованной фразы
     */
-    def decodedSecret: List[Char] = decode(frenchCode, secret)
+    def decodedSecret: List[Char] = ???
 
 
 
@@ -204,25 +158,7 @@ object Huffman {
     * Кодирует `text` используя `tree`
     * в последовательность бит.
     */
-    def encode(tree: CodeTree)(text: List[Char]): List[Bit] = {
-
-      def encodeChar(treeP: CodeTree, letter: Char, acc: List[Bit]): List[Bit] = {
-        treeP match {
-          case Leaf(char, _) => if (char == letter) acc else List()
-          case Fork(left, right, _, _) => encodeChar(left, letter, 0 :: acc) ::: encodeChar(right, letter, 1 :: acc)
-        }
-      }
-
-      @tailrec
-      def encodeText(text:  List[Char], acc:  List[Bit]): List[Bit] = {
-        if (text.isEmpty) acc
-        else encodeText(text.tail, encodeChar(tree, text.head, List()) ::: acc)
-      }
-
-      encodeText(text, List()).reverse
-
-    }
-
+    def encode(tree: CodeTree)(text: List[Char]): List[Bit] = ???
 
     // Часть 4b: Кодирование с использованием таблицы
 
@@ -240,15 +176,7 @@ object Huffman {
     * Строит таблицу, включающую каждый символ в дереве.
     * Последовательность бит представляет символ.
     */
-    def convert(tree: CodeTree): CodeTable = {
-      def scan(tree: CodeTree, acc: List[Bit]): CodeTable = 
-        tree match {
-          case Leaf(char, _) => List((char, acc.reverse))
-          case Fork(left, right, _, _) => mergeCodeTables(scan(left, 0 :: acc), scan(right, 1 :: acc))
-        }
-
-      scan(tree, List())
-    }
+    def convert(tree: CodeTree): CodeTable = ???
 
     /**
     * Объеденяет две таблицы символов в одну. В зависимости от того, как
@@ -263,12 +191,5 @@ object Huffman {
     * Для ускорение кодирования сначала трансформирует дерево в таблицу
     * и только потом выполняет кодирование.
     */
-    def quickEncode(tree: CodeTree)(text: List[Char]): List[Bit] = {
-      def coder = codeBits(convert(tree)) _
-      def encodeString(text: List[Char], acc: List[Bit]): List[Bit] = 
-        if (text.isEmpty) acc
-        else encodeString(text.tail, acc ::: coder(text.head))
-
-      encodeString(text, List())
-    }
+    def quickEncode(tree: CodeTree)(text: List[Char]): List[Bit] = ???
   }
