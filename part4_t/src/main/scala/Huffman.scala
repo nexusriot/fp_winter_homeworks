@@ -76,7 +76,14 @@ object Huffman {
     *       println("integer is  : "+ theInt)
     *   }
     */
-    def times(chars: List[Char]): List[(Char, Int)] =  ???
+    def times(chars: List[Char]): List[(Char, Int)] =
+  {
+    def loop(sub: List[Char], acc: List[(Char, Int)]): List[(Char, Int)] = sub match {
+      case Nil	=> acc
+      case x :: xs => loop(xs.filter(_ != x), acc :+ (x, 1 + xs.count(_ == x)))
+    }
+    loop(chars, List())
+  }
 
     /**
     * Возвращает список узлов `Leaf` для заданной таблицы частот `freqs`.
@@ -84,12 +91,23 @@ object Huffman {
     * Возвращаемый список должен быть отсортирован в возрастающем порядке (в голове списка
       * должна стоять пара с минимальным весом), где вес пары - это частота вхождения символа.
     */
-    def makeOrderedLeafList(freqs: List[(Char, Int)]): List[Leaf] = ???
+    def makeOrderedLeafList(freqs: List[(Char, Int)]): List[Leaf] =  {
 
-    /**
+      def order(input: List[(Char, Int)], result: List[Leaf]): List[Leaf] = {
+        if (input.isEmpty) result.sortWith(_.weight < _.weight)
+        else input.head match {
+          case (character, weight) => order(input.tail, Leaf(character, weight) :: result)
+        }
+      }
+
+      order(freqs, List.empty)
+    }
+
+
+  /**
     * Проверяет что `trees` включает только одно дерево.
     */
-    def singleton(trees: List[CodeTree]): Boolean = ???
+    def singleton(trees: List[CodeTree]): Boolean = trees.length == 1
 
     /**
     * Параметр `trees` содержит список `CodeTree`, отсортированный в возрастающем порядке весов.
@@ -99,7 +117,12 @@ object Huffman {
     *
     * Если в `trees` меньше двух элементов, то он возвращается не измененным.
     */
-    def combine(trees: List[CodeTree]): List[CodeTree] = ???
+    def combine(trees: List[CodeTree]): List[CodeTree] = trees match
+  {
+    case Nil => List()
+    case x :: Nil => List(x)
+    case x :: y :: azaz => (azaz :+ makeCodeTree(x, y)).sortWith((x, y) => x.weight < y.weight)
+  }
     /**
     * Эта функция вызывается следующим образом:
     *
